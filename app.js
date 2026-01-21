@@ -1,31 +1,17 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
+// Firebase Configuration (Replace with your actual config)
 const firebaseConfig = {
-  apiKey: "AIzaSyB--IXXXECwRYhUm3ozcePSPZiE2_wydoA",
-  authDomain: "omdigitalstudio-57cbd.firebaseapp.com",
-  projectId: "omdigitalstudio-57cbd",
-  storageBucket: "omdigitalstudio-57cbd.firebasestorage.app",
-  messagingSenderId: "489259478259",
-  appId: "1:489259478259:web:46f84078c6c185b9ff9b86"
+    apiKey: "AIzaSyB--IXXXECwRYhUm3ozcePSPZiE2_wydoA",
+    authDomain: "omdigitalstudio-57cbd.firebaseapp.com",
+    projectId: "omdigitalstudio-57cbd",
+    storageBucket: "omdigitalstudio-57cbd.firebasestorage.app",
+    messagingSenderId: "489259478259",
+    appId: "1:489259478259:web:46f84078c6c185b9ff9b86"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-
-// Initialize Firebase
-let app, auth, db, storage;
-try {
-    app = firebase.initializeApp(firebaseConfig);
-    auth = firebase.auth();
-    db = firebase.firestore();
-    storage = firebase.storage();
-} catch (error) {
-    console.log("Firebase initialized already or error:", error);
-}
 
 // Global Variables
 let currentUser = null;
@@ -778,5 +764,4 @@ document.addEventListener('DOMContentLoaded', function() {
     if (signupForm) {
         signupForm.addEventListener('submit', (e) => handleAuthSubmit(e, 'signup'));
     }
-
 });
