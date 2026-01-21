@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - OM Digital Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-indigo: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary-emerald: #10b981;
+            --accent-coral: #f97316;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-light: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--bg-card);
+            padding: 2rem 1rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-indigo);
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: var(--primary-indigo);
+            color: white;
+        }
+
+        .nav-links i {
+            width: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-indigo);
+        }
+
+        .stat-card h3 {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+
+        .stat-card .change {
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .change.positive {
+            color: var(--success);
+        }
+
+        .change.negative {
+            color: var(--danger);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: var(--primary-indigo);
+            color: white;
+        }
+
+        /* Content Panels */
+        .content-panel {
+            display: none;
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .content-panel.active {
+            display: block;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-indigo);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .status.replied {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-indigo);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Image Upload */
+        .image-upload {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 1rem;
+        }
+
+        .image-upload:hover {
+            border-color: var(--primary-indigo);
+        }
+
+        .image-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .preview-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .preview-item .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Activity Log */
+        .activity-log {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .log-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .log-item:last-child {
+            border-bottom: none;
+        }
+
+        .log-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(37, 99, 235, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-indigo);
+        }
+
+        .log-content {
+            flex: 1;
+        }
+
+        .log-time {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 70px;
+                padding: 1rem;
+            }
+            
+            .sidebar .logo span,
+            .sidebar .nav-links span {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary-indigo);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Unauthorized */
+        .unauthorized {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .unauthorized-content {
+            max-width: 400px;
+        }
+
+        .unauthorized h1 {
+            color: var(--danger);
+            margin-bottom: 1rem;
+        }
+
+        /* Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border-color);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-indigo);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Unauthorized Message -->
+    <div id="unauthorized" class="unauthorized" style="display: none;">
+        <div class="unauthorized-content">
+            <h1><i class="fas fa-lock"></i> Access Denied</h1>
+            <p>You must be logged in as the admin to access this dashboard.</p>
+            <p>Redirecting to homepage...</p>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">OM<span style="display: inline;"> Admin</span></div>
+            <ul class="nav-links">
+                <li><a href="#" class="active" onclick="switchTab('overview')">
+                    <i class="fas fa-tachometer-alt"></i><span>Overview</span>
+                </a></li>
+                <li><a href="#" onclick="switchTab('services')">
+                    <i class="fas fa-cogs"></i><span>Services</span>
+                </a></li>
+                <li><a href="#" onclick="switchTab('media')">
+                    <i class="fas fa-images"></i><span>Media</span>
+                </a></li>
+                <li><a href="#" onclick="switchTab('queries')">
+                    <i class="fas fa-inbox"></i><span>Queries</span>
+                </a></li>
+                <li><a href="#" onclick="switchTab('activity')">
+                    <i class="fas fa-history"></i><span>Activity Log</span>
+                </a></li>
+                <li><a href="#" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+                </a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h1>Admin Dashboard</h1>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span id="adminEmail"></span>
+                    <button class="btn btn-primary" onclick="syncData()">
+                        <i class="fas fa-sync-alt"></i> Sync
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Services</h3>
+                    <div class="value" id="totalServices">0</div>
+                    <div class="change positive">+2 this month</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending Queries</h3>
+                    <div class="value" id="pendingQueries">0</div>
+                    <div class="change negative">Requires attention</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Revenue</h3>
+                    <div class="value" id="totalRevenue">₹0</div>
+                    <div class="change positive">+15% this month</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Media Files</h3>
+                    <div class="value" id="mediaFiles">0</div>
+                    <div class="change positive">+5 this week</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('overview')">Overview</button>
+                <button class="tab" onclick="switchTab('services')">Services</button>
+                <button class="tab" onclick="switchTab('media')">Media</button>
+                <button class="tab" onclick="switchTab('queries')">Queries</button>
+                <button class="tab" onclick="switchTab('activity')">Activity</button>
+            </div>
+
+            <!-- Overview Panel -->
+            <div id="overviewPanel" class="content-panel active">
+                <div class="panel-header">
+                    <h2>Dashboard Overview</h2>
+                    <div class="checkbox-group">
+                        <label>AI Description Mode:</label>
+                        <label class="switch">
+                            <input type="checkbox" id="aiModeToggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                    <div>
+                        <h3 style="margin-bottom: 1rem;">Recent Activity</h3>
+                        <div class="activity-log" id="recentActivity">
+                            <!-- Activity items will be added here -->
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="margin-bottom: 1rem;">Quick Actions</h3>
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <button class="btn btn-primary" onclick="switchTab('services')">
+                                <i class="fas fa-plus"></i> Add New Service
+                            </button>
+                            <button class="btn btn-success" onclick="switchTab('media')">
+                                <i class="fas fa-upload"></i> Upload Media
+                            </button>
+                            <button class="btn" style="background: var(--warning); color: white;" 
+                                    onclick="switchTab('queries')">
+                                <i class="fas fa-inbox"></i> Check Queries
+                            </button>
+                            <button class="btn btn-danger" onclick="clearAllData()">
+                                <i class="fas fa-trash"></i> Clear Test Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services Panel -->
+            <div id="servicesPanel" class="content-panel">
+                <div class="panel-header">
+                    <h2>Service Management</h2>
+                    <button class="btn btn-primary" onclick="showServiceForm()">
+                        <i class="fas fa-plus"></i> Add Service
+                    </button>
+                </div>
+
+                <!-- Service Form (Hidden by default) -->
+                <div id="serviceForm" style="display: none; background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 8px; margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1rem;" id="formTitle">Add New Service</h3>
+                    <div class="form-group">
+                        <label>Service Name</label>
+                        <input type="text" id="serviceName" class="form-control" placeholder="e.g., Premium Web Design">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="serviceCategory" class="form-control">
+                            <option value="design">Web Design</option>
+                            <option value="hosting">Hosting</option>
+                            <option value="domain">Domain</option>
+                            <option value="maintenance">Maintenance</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Subcategory</label>
+                        <input type="text" id="serviceSubcategory" class="form-control" placeholder="e.g., E-commerce">
+                    </div>
+                    <div class="form-group">
+                        <label>Price (₹)</label>
+                        <input type="number" id="servicePrice" class="form-control" placeholder="18000">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="serviceDescription" class="form-control" rows="3" placeholder="Service description..."></textarea>
+                        <small style="color: var(--text-muted);">
+                            AI Description Mode is <span id="aiModeStatus">ON</span>. 
+                            <a href="#" onclick="toggleAIMode()" style="color: var(--primary-indigo);">Toggle</a>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Image</label>
+                        <div class="image-upload" onclick="document.getElementById('serviceImage').click()">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; margin-bottom: 1rem; color: var(--text-muted);"></i>
+                            <p>Click to upload service image</p>
+                            <input type="file" id="serviceImage" accept="image/*" style="display: none;" onchange="previewServiceImage(event)">
+                        </div>
+                        <div id="imagePreview" style="margin-top: 1rem; display: none;">
+                            <img id="previewImage" src="" alt="Preview" style="max-width: 200px; border-radius: 8px;">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="btn btn-primary" onclick="saveService()">Save Service</button>
+                        <button class="btn" style="background: var(--border-color);" onclick="hideServiceForm()">Cancel</button>
+                    </div>
+                </div>
+
+                <!-- Services List -->
+                <div class="table-container">
+                    <table id="servicesTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="servicesList">
+                            <!-- Services will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Media Panel -->
+            <div id="mediaPanel" class="content-panel">
+                <div class="panel-header">
+                    <h2>Media Manager</h2>
+                    <button class="btn btn-primary" onclick="uploadMedia()">
+                        <i class="fas fa-upload"></i> Upload Media
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <input type="file" id="mediaUpload" multiple accept="image/*" style="display: none;" onchange="handleMediaUpload(event)">
+                </div>
+
+                <div class="image-preview" id="mediaGallery">
+                    <!-- Media files will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Queries Panel -->
+            <div id="queriesPanel" class="content-panel">
+                <div class="panel-header">
+                    <h2>Customer Queries</h2>
+                    <button class="btn btn-success" onclick="markAllReplied()">
+                        <i class="fas fa-check"></i> Mark All Replied
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table id="queriesTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Service</th>
+                                <th>Message</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="queriesList">
+                            <!-- Queries will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Activity Panel -->
+            <div id="activityPanel" class="content-panel">
+                <div class="panel-header">
+                    <h2>Activity Log</h2>
+                    <button class="btn btn-danger" onclick="clearActivityLog()">
+                        <i class="fas fa-trash"></i> Clear Log
+                    </button>
+                </div>
+
+                <div class="activity-log" id="fullActivityLog">
+                    <!-- Full activity log will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
