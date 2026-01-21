@@ -1,12 +1,20 @@
-// Firebase Configuration (Replace with your actual config)
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyB--IXXXECwRYhUm3ozcePSPZiE2_wydoA",
+  authDomain: "omdigitalstudio-57cbd.firebaseapp.com",
+  projectId: "omdigitalstudio-57cbd",
+  storageBucket: "omdigitalstudio-57cbd.firebasestorage.app",
+  messagingSenderId: "489259478259",
+  appId: "1:489259478259:web:46f84078c6c185b9ff9b86"
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase
 let app, auth, db, storage;
@@ -770,4 +778,5 @@ document.addEventListener('DOMContentLoaded', function() {
     if (signupForm) {
         signupForm.addEventListener('submit', (e) => handleAuthSubmit(e, 'signup'));
     }
+
 });
